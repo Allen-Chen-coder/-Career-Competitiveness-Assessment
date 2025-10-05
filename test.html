@@ -1660,16 +1660,16 @@
             // 验证所有模块所有题目都已回答
             let allAnswered = true;
             
+	   let sum=0;
             for (let i = 1; i <= 5; i++) {
                 const questions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
-                const totalQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length);
-                
-                if (questions.length < totalQuestions) {
+                sum += answeredQuestions.length;
+            }
+            
+	   if (sum < 58) {
                     allAnswered = false;
                     break;
                 }
-            }
-            
             if (!allAnswered) {
                 alert('请完成所有模块的所有题目再提交');
                 return;
