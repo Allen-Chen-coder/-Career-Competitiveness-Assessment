@@ -1662,8 +1662,7 @@
             
             for (let i = 1; i <= 5; i++) {
                 const questions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
-                const totalQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length / 
-                                      (i === 1 || i === 2 || i === 4 ? 4 : 5);
+                const totalQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length);
                 
                 if (questions.length < totalQuestions) {
                     allAnswered = false;
