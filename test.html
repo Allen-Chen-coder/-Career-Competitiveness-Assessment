@@ -1659,17 +1659,26 @@
         document.getElementById('submit-test').addEventListener('click', function() {
             // 验证所有模块所有题目都已回答
             let allAnswered = true;
+            let sum = 0;
+
+	    for (let i = 1; i <= 5; i++) {
+    		// 获取当前模块中已选中的单选按钮（即已回答的题目）
+    		const answeredQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
+    
+    		// 将当前模块已回答的题目数量累加到总和中
+   		 sum += answeredQuestions.length;
+    
+   		 // 下面是原来的验证逻辑（保持不变）
+  		  const totalOptions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length;
+  		  const totalQuestions = i === 1 || i === 2 || i === 4 ? totalOptions / 4 : totalOptions / 5;
+    
+  		  if (answeredQuestions.length < totalQuestions) {
+     		   allAnswered = false;
+    		    break;
+ 		   }
+		}
+
             
-	   let sum=0;
-            for (let i = 1; i <= 5; i++) {
-                const questions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
-                sum += answeredQuestions.length;
-            }
-            
-	   if (sum < 58) {
-                    allAnswered = false;
-                    break;
-                }
             if (!allAnswered) {
                 alert('请完成所有模块的所有题目再提交');
                 return;
