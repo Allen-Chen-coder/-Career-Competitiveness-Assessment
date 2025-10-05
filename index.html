@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>职业竞争力测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#64748b',
+                        accent: '#10b981'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card {
+                @apply bg-white rounded-lg shadow-md p-6 mb-6 transition-all duration-300 hover:shadow-lg;
+            }
+            .btn {
+                @apply px-6 py-2 rounded-md font-medium transition-all duration-300;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:bg-primary/90;
+            }
+            .btn-secondary {
+                @apply bg-secondary text-white hover:bg-secondary/90;
+            }
+            .btn-accent {
+                @apply bg-accent text-white hover:bg-accent/90;
+            }
+            .question-item {
+                @apply mb-8 last:mb-0;
+            }
+            .option-label {
+                @apply flex items-center mb-2 cursor-pointer;
+            }
+            .option-input {
+                @apply mr-3 h-4 w-4 text-primary focus:ring-primary;
+            }
+            .progress-indicator {
+                @apply w-3 h-3 rounded-full transition-colors duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- 首页说明 -->
+        <div id="home-page" class="block">
+            <div class="card text-center">
+                <h1 class="text-3xl font-bold text-gray-800 mb-6">职业竞争力测试</h1>
+                <div class="text-left mb-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">测试说明</h2>
+                    <p class="text-gray-600 mb-4">本测试共五个维度，分别为创造力(创新能力)、技术能力(专业能力与学习能力)、任务理解与解决能力(服从性与理解能力)、社交应变能力、问题拆解能力(逻辑性与规划性)，每个维度包含若干题目。</p>
+                    <p class="text-gray-600 mb-4">题目选项分为两类，第一类为频率性选项（A 总是、B 经常、C 偶尔、D 从不），计分方式为 A=4 分、B=3 分、C=2 分、D=1 分；第二类为程度性选项（A 非常同意、B 比较同意、C 一般、D 比较不同意、E 非常不同意），计分方式为 A=5 分、B=4 分、C=3 分、D=2 分、E=1 分。</p>
+                    <p class="text-gray-600 mb-4">每道题均有明确权重（每题权重1），需先根据选项得出基础分，再用基础分乘以权重得到该题最终得分。将每个维度下所有题目最终得分相加，再按照“（该维度总分 / 该维度满分）×100”的公式计算出每个维度的综合数值（满分100）。</p>
+                    <p class="text-gray-600">五个维度的重要性权重设定为：创造力(20%)、技术能力(25%)、任务理解与解决能力(20%)、社交应变能力(15%)、问题拆解能力(20%)。总分数= 创造力综合数值×20% + 技术能力综合数值×25% + 任务理解与解决能力综合数值×20% + 社交应变能力综合数值×15% + 问题拆解能力综合数值×20%（除不开时向下取整）。</p>
+                </div>
+                <button id="start-test" class="btn btn-primary text-lg">
+                    <i class="fa fa-play-circle mr-2"></i>开始测试
+                </button>
+            </div>
+        </div>
+
+        <!-- 测试页面（初始隐藏） -->
+        <div id="test-page" class="hidden">
+            <!-- 模块进度指示器 -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="text-xl font-semibold text-gray-800" id="module-title">模块1：创造力（创新能力）</div>
+                <div class="flex space-x-2">
+                    <span class="progress-indicator bg-primary" data-module="1"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="2"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="3"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="4"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="5"></span>
+                </div>
+            </div>
+
+            <!-- 模块容器 -->
+            <div class="module-container">
+                <!-- 模块1：创造力 -->
+                <div id="module-1" class="module block">
+                    <div class="card">
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">1. 在日常工作中，我会主动思考现有工作流程的优化方法</h3>
+                            <div class="option-group" data-question="1" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q1" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">2. 当面对新任务时，我倾向于尝试全新的解决思路而非沿用旧方法</h3>
+                            <div class="option-group" data-question="2" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q2" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 我认为自己能频繁提出具有新颖性且可落地的工作方案</h3>
+                            <div class="option-group" data-question="3" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q3" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">4. 在团队头脑风暴中，我通常能贡献较多独特的想法</h3>
+                            <div class="option-group" data-question="4" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q4" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 我乐于接受打破常规的工作挑战，并能从中探索创新点</h3>
+                            <div class="option-group" data-question="5" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+				<label class="option-label">
+                                    <input type="radio" name="q5" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q5" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+                     <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 我会定期关注行业内的创新案例，并思考如何借鉴到自身工作中</h3>
+                            <div class="option-group" data-question="6" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q6" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q6" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q6" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q6" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">7. 当工作结果未达预期时，我会从创新角度寻找改进方向</h3>
+                            <div class="option-group" data-question="7" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q7" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q7" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q7" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q7" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q7" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 我能够在现有知识和经验基础上，创造出全新的工作工具或方法</h3>
+                            <div class="option-group" data-question="8" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q8" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q8" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q8" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q8" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 我认为创新思维是提升工作效率和质量的关键因素</h3>
+                            <div class="option-group" data-question="9" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q9" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q9" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q9" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q9" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q9" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 在跨部门协作中，我能结合不同部门的特点提出创新性的合作模式</h3>
+                            <div class="option-group" data-question="10" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q10" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q10" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q10" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q10" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">11. 我会主动参与公司内部的创新项目或活动</h3>
+                            <div class="option-group" data-question="11" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q11" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q11" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q11" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q11" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">12. 面对复杂问题时，我能跳出固有思维框架，找到创新性的解决方案</h3>
+                            <div class="option-group" data-question="12" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q12" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q12" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q12" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q12" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q12" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary opacity-50 cursor-not-allowed" disabled>
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button class="next-module btn btn-primary" data-next="2">
+                                进入下一模块<i class="fa fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模块2：技术能力 -->
+                <div id="module-2" class="module hidden">
+                    <div class="card">
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">1. 我能熟练运用岗位所需的专业软件和工具完成工作任务</h3>
+                            <div class="option-group" data-question="13" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q13" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q13" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q13" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q13" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">2. 当行业内出现新的专业技术或知识时，我会在一个月内主动学习了解</h3>
+                            <div class="option-group" data-question="14" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q14" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q14" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q14" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q14" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+                       <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 我能独立解决工作中遇到的大部分专业技术难题</h3>
+                            <div class="option-group" data-question="15" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q15" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q15" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q15" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q15" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">4. 我会制定系统的学习计划，定期提升自身专业能力</h3>
+                            <div class="option-group" data-question="16" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q16" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q16" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q16" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q16" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q16" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 在工作中，我能准确判断自身专业知识的薄弱环节并及时弥补</h3>
+                            <div class="option-group" data-question="17" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q17" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q17" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q17" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q17" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 我能够快速掌握新的工作技能，并应用到实际工作中</h3>
+                            <div class="option-group" data-question="18" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q18" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q18" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q18" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q18" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">7. 我会主动阅读专业相关的书籍、期刊或文献</h3>
+                            <div class="option-group" data-question="19" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q19" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q19" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q19" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q19" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 面对超出自身现有专业能力的任务，我能通过学习在规定时间内达到完成任务的能力要求</h3>
+                            <div class="option-group" data-question="20" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q20" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q20" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q20" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q20" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q20" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 我能为团队成员提供专业技术方面的指导和帮助</h3>
+                            <div class="option-group" data-question="21" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q21" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q21" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q21" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q21" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 我会关注行业技术发展趋势，提前学习相关知识以适应未来工作需求</h3>
+                            <div class="option-group" data-question="22" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q22" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q22" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q22" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q22" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">11. 我能通过实践不断总结经验，提升专业技能水平</h3>
+                            <div class="option-group" data-question="23" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q23" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q23" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q23" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q23" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q23" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">12. 我能顺利通过公司组织的专业能力考核</h3>
+                            <div class="option-group" data-question="24" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q24" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q24" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q24" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q24" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">13. 当遇到新的专业概念时，我能快速理解并融入到自身知识体系中</h3>
+                            <div class="option-group" data-question="25" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q25" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q25" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q25" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q25" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary" data-prev="1">
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button class="next-module btn btn-primary" data-next="3">
+                                进入下一模块<i class="fa fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模块3：任务理解与解决能力 -->
+                <div id="module-3" class="module hidden">
+                    <div class="card">
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">1. 领导布置任务后，我能在5分钟内准确理解任务目标和要求</h3>
+                            <div class="option-group" data-question="26" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q26" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q26" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q26" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q26" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">2. 我会严格按照领导的指示和要求完成工作任务</h3>
+                            <div class="option-group" data-question="27" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q27" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q27" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q27" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q27" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q27" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+                       <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 当对任务要求存在疑问时，我会及时与领导沟通确认</h3>
+                            <div class="option-group" data-question="28" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q28" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q28" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q28" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q28" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">4. 我能准确把握任务的重点和难点，并优先处理关键部分</h3>
+                            <div class="option-group" data-question="29" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q29" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q29" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q29" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q29" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 即使任务内容与个人兴趣不符，我也会认真完成</h3>
+                            <div class="option-group" data-question="30" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q30" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q30" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q30" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q30" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q30" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 在任务执行过程中，若领导调整任务要求，我能快速调整工作方向</h3>
+                            <div class="option-group" data-question="31" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q31" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q31" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q31" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q31" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">7. 我能理解任务背后的深层目的，并以此为导向开展工作</h3>
+                            <div class="option-group" data-question="32" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q32" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q32" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q32" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q32" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q32" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 面对复杂任务，我能通过与他人沟通进一步明确任务细节</h3>
+                            <div class="option-group" data-question="33" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q33" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q33" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q33" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q33" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 我会按时按质完成领导交办的各项任务</h3>
+                            <div class="option-group" data-question="34" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q34" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q34" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q34" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q34" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 当任务执行遇到困难时，我会首先从自身找原因并解决，而非抱怨任务难度</h3>
+                            <div class="option-group" data-question="35" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q35" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q35" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q35" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q35" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q35" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">11. 我能根据任务的紧急程度和重要程度，合理安排工作顺序</h3>
+                            <div class="option-group" data-question="36" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q36" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q36" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q36" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q36" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary" data-prev="2">
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button class="next-module btn btn-primary" data-next="4">
+                                进入下一模块<i class="fa fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模块4：社交应变能力 -->
+                <div id="module-4" class="module hidden">
+                    <div class="card">
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">1. 在陌生的社交场合，我能在10分钟内与他人建立初步的良好沟通</h3>
+                            <div class="option-group" data-question="37" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q37" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q37" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q37" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q37" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">2. 当与他人意见产生分歧时，我能冷静倾听并找到双方的共识点</h3>
+                            <div class="option-group" data-question="38" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q38" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q38" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q38" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q38" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q38" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+                       <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 我能快速适应不同类型人群的沟通方式</h3>
+                            <div class="option-group" data-question="39" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q39" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q39" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q39" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q39" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">4. 在商务谈判中，我能根据对方的反应及时调整谈判策略</h3>
+                            <div class="option-group" data-question="40" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q40" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q40" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q40" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q40" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 当遇到突发的社交冲突时，我能在短时间内想出妥善的解决办法</h3>
+                            <div class="option-group" data-question="41" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q41" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q41" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q41" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q41" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q41" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 我能与不同部门、不同岗位的同事保持良好的合作关系</h3>
+                            <div class="option-group" data-question="42" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q42" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q42" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q42" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q42" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">7. 在与客户沟通时，我能准确把握客户需求并给予恰当回应</h3>
+                            <div class="option-group" data-question="43" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q43" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q43" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q43" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q43" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 我善于利用社交场合拓展人脉资源</h3>
+                            <div class="option-group" data-question="44" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q44" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q44" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q44" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q44" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q44" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 当他人情绪不佳时，我能敏锐察觉并给予适当的安慰或支持</h3>
+                            <div class="option-group" data-question="45" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q45" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q45" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q45" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q45" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 在跨文化交流中，我能尊重不同文化习惯并顺利开展沟通</h3>
+                            <div class="option-group" data-question="46" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q46" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q46" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q46" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q46" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q46" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary" data-prev="3">
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button class="next-module btn btn-primary" data-next="5">
+                                进入下一模块<i class="fa fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模块5：问题拆解能力 -->
+                <div id="module-5" class="module hidden">
+                    <div class="card">
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">1. 面对复杂问题时，我能在30分钟内将其拆解为若干个可解决的小问题</h3>
+                            <div class="option-group" data-question="47" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q47" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q47" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q47" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q47" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">2. 我会按照逻辑顺序分析问题的各个环节，找出问题的根源</h3>
+                            <div class="option-group" data-question="48" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q48" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q48" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q48" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q48" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q48" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+                     <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 在解决问题前，我会制定详细的行动计划，明确每个步骤的目标和时间节点</h3>
+                            <div class="option-group" data-question="49" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q49" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q49" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q49" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q49" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">4. 我能根据问题的优先级，合理安排解决问题的顺序</h3>
+                            <div class="option-group" data-question="50" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q50" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q50" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q50" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q50" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 当计划执行过程中出现偏差时，我能快速分析原因并调整计划</h3>
+                            <div class="option-group" data-question="51" data-type="degree">
+                                <label class="option-label">
+                                    <input type="radio" name="q51" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q51" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q51" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q51" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q51" value="1" class="option-input">
+                                    E. 非常不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 我能清晰地向他人阐述问题的拆解过程和解决思路</h3>
+                            <div class="option-group" data-question="52" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q52" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q52" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q52" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q52" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">7. 在制定计划时，我会充分考虑可能出现的风险并制定应对措施</h3>
+                            <div class="option-group" data-question="53" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                     	<div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 我能通过逻辑推理，预测问题解决过程中可能遇到的困难</h3>
+                            <div class="option-group" data-question="54" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+				<label class="option-label">
+                                    <input type="radio" name="q54" value="1" class="option-input">
+                                    E. 比较不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 对于长期项目，我会将其分解为多个阶段，每个阶段设定明确的里程碑</h3>
+                            <div class="option-group" data-question="55" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 我能根据问题的性质，选择合适的分析工具和方法进行问题拆解</h3>
+                            <div class="option-group" data-question="56" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+
+                     	<div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">11. 在团队解决问题时，我能引导团队成员按照逻辑顺序开展讨论</h3>
+                            <div class="option-group" data-question="57" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+				<label class="option-label">
+                                    <input type="radio" name="q57" value="1" class="option-input">
+                                    E. 比较不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">12. 我会定期回顾问题解决过程和计划执行情况，总结经验教训</h3>
+                            <div class="option-group" data-question="58" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary" data-prev="4">
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button id="submit-test" class="btn btn-accent">
+                                <i class="fa fa-check-circle mr-2"></i>提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面（初始隐藏） -->
+        <div id="result-page" class="hidden">
+            <div class="card">
+                <h2 class="text-2xl font-bold text-center mb-6">测试结果</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4">综合得分：<span id="total-score" class="text-primary">0</span>/100</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>创造力：<span id="score-1" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>技术能力：<span id="score-2" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>任务理解与解决能力：<span id="score-3" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>社交应变能力：<span id="score-4" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg md:col-span-2">
+                            <p>问题拆解能力：<span id="score-5" class="font-medium">0</span>/100</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 雷达图容器 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4">五维能力雷达图</h3>
+                    <div class="h-80">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="restart-test" class="btn btn-primary">
+                        <i class="fa fa-refresh mr-2"></i>重新测试
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储每个模块的题目范围和满分值
+        const moduleConfig = {
+            1: { 
+                name: "创造力（创新能力）",
+                start: 1, 
+                end: 3, 
+                fullScore: 10 // 示例值，根据实际题目数量计算
+            },
+            2: { 
+                name: "技术能力（专业能力与学习能力）",
+                start: 13, 
+                end: 14, 
+                fullScore: 8 // 示例值
+            },
+            3: { 
+                name: "任务理解与解决能力",
+                start: 26, 
+                end: 27, 
+                fullScore: 9 // 示例值
+            },
+            4: { 
+                name: "社交应变能力",
+                start: 37, 
+                end: 38, 
+                fullScore: 9 // 示例值
+            },
+            5: { 
+                name: "问题拆解能力",
+                start: 47, 
+                end: 48, 
+                fullScore: 9 // 示例值
+            }
+        };
+
+        // 当前模块
+        let currentModule = 1;
+        
+        // 监听开始测试按钮
+        document.getElementById('start-test').addEventListener('click', function() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('test-page').classList.remove('hidden');
+        });
+        
+        // 监听下一模块按钮
+        document.querySelectorAll('.next-module').forEach(button => {
+            button.addEventListener('click', function() {
+                const nextModule = parseInt(this.getAttribute('data-next'));
+                
+                // 验证当前模块所有题目都已回答
+                const currentQuestions = document.querySelectorAll(`#module-${currentModule} input[type="radio"]:checked`);
+                const totalQuestions = document.querySelectorAll(`#module-${currentModule} input[type="radio"]`).length / 
+                                      (moduleConfig[currentModule].type === 'frequency' ? 4 : 5);
+                
+                if (currentQuestions.length < totalQuestions) {
+                    alert('请完成当前模块的所有题目再进入下一模块');
+                    return;
+                }
+                
+                // 隐藏当前模块，显示下一模块
+                document.getElementById(`module-${currentModule}`).classList.add('hidden');
+                document.getElementById(`module-${nextModule}`).classList.remove('hidden');
+                
+                // 更新模块标题
+                document.getElementById('module-title').textContent = `模块${nextModule}：${moduleConfig[nextModule].name}`;
+                
+                // 更新进度指示器
+                document.querySelector(`.progress-indicator[data-module="${nextModule}"]`).classList.remove('bg-gray-300');
+                document.querySelector(`.progress-indicator[data-module="${nextModule}"]`).classList.add('bg-primary');
+                
+                // 更新当前模块
+                currentModule = nextModule;
+                
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // 监听上一模块按钮
+        document.querySelectorAll('.prev-module').forEach(button => {
+            button.addEventListener('click', function() {
+                const prevModule = parseInt(this.getAttribute('data-prev'));
+                
+                // 隐藏当前模块，显示上一模块
+                document.getElementById(`module-${currentModule}`).classList.add('hidden');
+                document.getElementById(`module-${prevModule}`).classList.remove('hidden');
+                
+                // 更新模块标题
+                document.getElementById('module-title').textContent = `模块${prevModule}：${moduleConfig[prevModule].name}`;
+                
+                // 更新当前模块
+                currentModule = prevModule;
+                
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // 监听提交按钮
+        document.getElementById('submit-test').addEventListener('click', function() {
+            // 验证所有模块所有题目都已回答
+            let sum = 0;
+
+	    for (let i = 1; i <= 5; i++) {
+    		// 获取当前模块中已选中的单选按钮（即已回答的题目）
+    		const answeredQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
+    
+    		// 将当前模块已回答的题目数量累加到总和中
+   		 sum += answeredQuestions.length;
+    	    }
+   	    const allAnswered = sum === 58;
+	    if (!allAnswered) {
+        	// 计算未完成的题目数量并提示
+        	const remaining = 58 - sum;
+        	alert(`还有${remaining}道题目未完成，请完成所有题目后再提交`);
+        	return;
+    	    }
+	    const moduleScores = calculateScores();
+    	    showResults(moduleScores);
+	});
+
+	        
+
+        // 计算得分
+        // 计算得分
+	function calculateScores() {
+    		const scores = {
+        		1: 0,
+        		2: 0,
+        		3: 0,
+        		4: 0,
+        		5: 0
+    		};
+    
+    		// 定义每个模块的固定满分值
+    		const fullScores = {
+        		1: 52,   // 模块1满分
+        		2: 55,   // 模块2满分
+        		3: 48,   // 模块3满分
+        		4: 44,   // 模块4满分
+        		5: 52    // 模块5满分
+    		};
+    
+    		// 计算每个模块的得分
+    		for (let module = 1; module <= 5; module++) {
+        		let total = 0;
+        		// 获取当前模块中所有已回答的题目分值
+        		const questions = document.querySelectorAll(`#module-${module} input[type="radio"]:checked`);
+        
+        		questions.forEach(question => {
+            			total += parseInt(question.value); // 累加该模块的实际得分
+       		 	});
+        
+        		// 计算百分比得分（当前模块得分 / 该模块固定满分 * 100）
+        		const percentage = Math.floor((total / fullScores[module]) * 100);
+        		scores[module] = percentage;
+    		}
+    
+    		// 计算综合得分（按权重计算）
+    		const totalScore = Math.floor(
+        		scores[1] * 0.2 + 
+        		scores[2] * 0.25 + 
+        		scores[3] * 0.2 + 
+        		scores[4] * 0.15 + 
+        		scores[5] * 0.2
+   		 );
+    
+    		return { ...scores, total: totalScore };
+	}
+        
+        // 显示结果
+        function showResults(scores) {
+            // 隐藏测试页面，显示结果页面
+            document.getElementById('test-page').classList.add('hidden');
+            document.getElementById('result-page').classList.remove('hidden');
+            
+            // 显示得分
+            document.getElementById('total-score').textContent = scores.total;
+            document.getElementById('score-1').textContent = scores[1];
+            document.getElementById('score-2').textContent = scores[2];
+            document.getElementById('score-3').textContent = scores[3];
+            document.getElementById('score-4').textContent = scores[4];
+            document.getElementById('score-5').textContent = scores[5];
+            
+            // 生成雷达图数据（每个模块得分除以100再乘以5）
+            const radarScores = [
+                scores[1] / 100 * 5,
+                scores[2] / 100 * 5,
+                scores[3] / 100 * 5,
+                scores[4] / 100 * 5,
+                scores[5] / 100 * 5
+            ];
+            
+            // 绘制雷达图
+            drawRadarChart(radarScores);
+        }
+        
+        // 绘制雷达图
+        function drawRadarChart(scores) {
+            const ctx = document.getElementById('radar-chart').getContext('2d');
+            const labels = [
+                '创造性', 
+                '技术能力', 
+                '任务理解与解决能力', 
+                '社交应变能力', 
+                '问题拆解能力'
+            ];
+            
+            // 如果已有图表实例，先销毁
+            if (window.radarChartInstance) {
+                window.radarChartInstance.destroy();
+            }
+            
+            // 创建新图表
+            window.radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '能力值',
+                        data: scores,
+                        backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(37, 99, 235, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 重新测试
+        document.getElementById('restart-test').addEventListener('click', function() {
+            // 重置所有选择
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 重置模块显示
+            document.querySelectorAll('.module').forEach((module, index) => {
+                if (index === 0) {
+                    module.classList.remove('hidden');
+                } else {
+                    module.classList.add('hidden');
+                }
+            });
+            
+            // 重置进度指示器
+            document.querySelectorAll('.progress-indicator').forEach((indicator, index) => {
+                if (index === 0) {
+                    indicator.classList.remove('bg-gray-300');
+                    indicator.classList.add('bg-primary');
+                } else {
+                    indicator.classList.remove('bg-primary');
+                    indicator.classList.add('bg-gray-300');
+                }
+            });
+            
+            // 重置当前模块
+            currentModule = 1;
+            
+            // 更新模块标题
+            document.getElementById('module-title').textContent = `模块1：${moduleConfig[1].name}`;
+            
+            // 隐藏结果页面，显示测试页面
+            document.getElementById('result-page').classList.add('hidden');
+            document.getElementById('test-page').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
