@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的测试页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#64748b',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .question-card {
+                @apply bg-white rounded-lg shadow-md p-6 mb-6 transition-all duration-300 hover:shadow-lg;
+            }
+            .btn-primary {
+                @apply bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors duration-300;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-3xl">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">我的测试</h1>
+            <p class="text-secondary">请完成以下测试题目，然后提交</p>
+        </header>
+
+        <form id="testForm" class="space-y-6">
+            <!-- 问题1 -->
+            <div class="question-card">
+                <h2 class="text-xl font-semibold mb-4">1. HTML的全称是什么？</h2>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="q1" value="A" class="mr-2">
+                        A. Hyperlinks and Text Markup Language
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q1" value="B" class="mr-2">
+                        B. Home Tool Markup Language
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q1" value="C" class="mr-2">
+                        C. Hyper Text Markup Language
+                    </label>
+                </div>
+            </div>
+
+            <!-- 问题2 -->
+            <div class="question-card">
+                <h2 class="text-xl font-semibold mb-4">2. 下列哪个是JavaScript框架？</h2>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="q2" value="A" class="mr-2">
+                        A. React
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q2" value="B" class="mr-2">
+                        B. Django
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q2" value="C" class="mr-2">
+                        C. Flask
+                    </label>
+                </div>
+            </div>
+
+            <!-- 问题3 -->
+            <div class="question-card">
+                <h2 class="text-xl font-semibold mb-4">3. CSS用于什么？</h2>
+                <div class="space-y-2">
+                    <label class="flex items-center">
+                        <input type="radio" name="q3" value="A" class="mr-2">
+                        A. 处理网页的逻辑
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q3" value="B" class="mr-2">
+                        B. 美化网页的样式
+                    </label>
+                    <label class="flex items-center">
+                        <input type="radio" name="q3" value="C" class="mr-2">
+                        C. 存储网页的数据
+                    </label>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="button" id="submitBtn" class="btn-primary">
+                    <i class="fa fa-paper-plane mr-2"></i>提交测试
+                </button>
+            </div>
+        </form>
+
+        <!-- 结果显示区域 -->
+        <div id="result" class="hidden mt-8 p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-2xl font-bold mb-4 text-center">测试结果</h2>
+            <p id="score" class="text-center text-xl mb-4"></p>
+            <div id="feedback" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // 正确答案
+        const correctAnswers = {
+            q1: "C",
+            q2: "A",
+            q3: "B"
+        };
+
+        // 提交按钮事件
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            let score = 0;
+            const totalQuestions = Object.keys(correctAnswers).length;
+            const feedback = [];
+
+            // 检查每个问题的答案
+            for (const [question, correctAnswer] of Object.entries(correctAnswers)) {
+                const selectedOption = document.querySelector(`input[name="${question}"]:checked`);
+                
+                if (selectedOption) {
+                    const questionNumber = question.replace('q', '');
+                    if (selectedOption.value === correctAnswer) {
+                        score++;
+                        feedback.push(`<p class="text-green-600"><i class="fa fa-check-circle mr-2"></i>问题 ${questionNumber}：回答正确</p>`);
+                    } else {
+                        feedback.push(`<p class="text-red-600"><i class="fa fa-times-circle mr-2"></i>问题 ${questionNumber}：回答错误，正确答案是 ${correctAnswer}</p>`);
+                    }
+                } else {
+                    const questionNumber = question.replace('q', '');
+                    feedback.push(`<p class="text-yellow-600"><i class="fa fa-exclamation-circle mr-2"></i>问题 ${questionNumber}：未回答</p>`);
+                }
+            }
+
+            // 显示结果
+            document.getElementById('score').textContent = `你的得分：${score}/${totalQuestions}`;
+            document.getElementById('feedback').innerHTML = feedback.join('');
+            document.getElementById('result').classList.remove('hidden');
+            
+            // 滚动到结果区域
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
