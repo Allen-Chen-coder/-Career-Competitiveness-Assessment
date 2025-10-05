@@ -1678,42 +1678,54 @@
     	    showResults(moduleScores);
 	});
 
-        
+	        
+
         // 计算得分
-        function calculateScores() {
-            const scores = {
-                1: 0,
-                2: 0,
-                3: 0,
-                4: 0,
-                5: 0
-            };
-            
-            // 计算每个模块的得分
-            for (let module = 1; module <= 5; module++) {
-                let total = 0;
-                const questions = document.querySelectorAll(`#module-${module} input[type="radio"]:checked`);
-                
-                questions.forEach(question => {
-                    total += parseInt(question.value);
-                });
-                
-                // 计算百分比得分（当前模块得分 / 该模块满分 * 100）
-                const percentage = Math.floor((total / moduleConfig[module].fullScore) * 100);
-                scores[module] = percentage;
-            }
-            
-            // 计算综合得分（按权重计算）
-            const totalScore = Math.floor(
-                scores[1] * 0.2 + 
-                scores[2] * 0.25 + 
-                scores[3] * 0.2 + 
-                scores[4] * 0.15 + 
-                scores[5] * 0.2
-            );
-            
-            return { ...scores, total: totalScore };
-        }
+        // 计算得分
+	function calculateScores() {
+    		const scores = {
+        		1: 0,
+        		2: 0,
+        		3: 0,
+        		4: 0,
+        		5: 0
+    		};
+    
+    		// 定义每个模块的固定满分值
+    		const fullScores = {
+        		1: 52,   // 模块1满分
+        		2: 55,   // 模块2满分
+        		3: 48,   // 模块3满分
+        		4: 44,   // 模块4满分
+        		5: 52    // 模块5满分
+    		};
+    
+    		// 计算每个模块的得分
+    		for (let module = 1; module <= 5; module++) {
+        		let total = 0;
+        		// 获取当前模块中所有已回答的题目分值
+        		const questions = document.querySelectorAll(`#module-${module} input[type="radio"]:checked`);
+        
+        		questions.forEach(question => {
+            			total += parseInt(question.value); // 累加该模块的实际得分
+       		 	});
+        
+        		// 计算百分比得分（当前模块得分 / 该模块固定满分 * 100）
+        		const percentage = Math.floor((total / fullScores[module]) * 100);
+        		scores[module] = percentage;
+    		}
+    
+    		// 计算综合得分（按权重计算）
+    		const totalScore = Math.floor(
+        		scores[1] * 0.2 + 
+        		scores[2] * 0.25 + 
+        		scores[3] * 0.2 + 
+        		scores[4] * 0.15 + 
+        		scores[5] * 0.2
+   		 );
+    
+    		return { ...scores, total: totalScore };
+	}
         
         // 显示结果
         function showResults(scores) {
