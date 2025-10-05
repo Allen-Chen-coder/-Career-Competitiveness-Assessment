@@ -52,6 +52,9 @@
             .option-input {
                 @apply mr-3 h-4 w-4 text-primary focus:ring-primary;
             }
+            .progress-indicator {
+                @apply w-3 h-3 rounded-full transition-colors duration-300;
+            }
         }
     </style>
 </head>
@@ -80,15 +83,15 @@
             <div class="flex justify-between items-center mb-8">
                 <div class="text-xl font-semibold text-gray-800" id="module-title">模块1：创造力（创新能力）</div>
                 <div class="flex space-x-2">
-                    <span class="module-indicator w-3 h-3 rounded-full bg-primary" data-module="1"></span>
-                    <span class="module-indicator w-3 h-3 rounded-full bg-gray-300" data-module="2"></span>
-                    <span class="module-indicator w-3 h-3 rounded-full bg-gray-300" data-module="3"></span>
-                    <span class="module-indicator w-3 h-3 rounded-full bg-gray-300" data-module="4"></span>
-                    <span class="module-indicator w-3 h-3 rounded-full bg-gray-300" data-module="5"></span>
+                    <span class="progress-indicator bg-primary" data-module="1"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="2"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="3"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="4"></span>
+                    <span class="progress-indicator bg-gray-300" data-module="5"></span>
                 </div>
             </div>
 
-            <!-- 模块容器（五个模块，初始只显示第一个） -->
+            <!-- 模块容器 -->
             <div class="module-container">
                 <!-- 模块1：创造力 -->
                 <div id="module-1" class="module block">
@@ -183,7 +186,7 @@
 
                         <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">5. 我乐于接受打破常规的工作挑战，并能从中探索创新点</h3>
-                            <div class="option-group" data-question="5" data-type="degree">
+                            <div class="option-group" data-question="5" data-type="frequency">
                                 <label class="option-label">
                                     <input type="radio" name="q5" value="5" class="option-input">
                                     A. 非常同意
@@ -196,7 +199,7 @@
                                     <input type="radio" name="q5" value="3" class="option-input">
                                     C. 一般
                                 </label>
-                                <label class="option-label">
+				<label class="option-label">
                                     <input type="radio" name="q5" value="2" class="option-input">
                                     D. 比较不同意
                                 </label>
@@ -206,8 +209,7 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="question-item">
+                     <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">6. 我会定期关注行业内的创新案例，并思考如何借鉴到自身工作中</h3>
                             <div class="option-group" data-question="6" data-type="frequency">
                                 <label class="option-label">
@@ -374,7 +376,7 @@
                         </div>
 
                         <div class="flex justify-end mt-8 space-x-4">
-                            <button class="btn btn-secondary opacity-50 cursor-not-allowed" disabled>
+                            <button class="prev-module btn btn-secondary opacity-50 cursor-not-allowed" disabled>
                                 <i class="fa fa-arrow-left mr-2"></i>返回上一模块
                             </button>
                             <button class="next-module btn btn-primary" data-next="2">
@@ -430,8 +432,7 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="question-item">
+                       <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 我能独立解决工作中遇到的大部分专业技术难题</h3>
                             <div class="option-group" data-question="15" data-type="frequency">
                                 <label class="option-label">
@@ -746,8 +747,7 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="question-item">
+                       <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 当对任务要求存在疑问时，我会及时与领导沟通确认</h3>
                             <div class="option-group" data-question="28" data-type="frequency">
                                 <label class="option-label">
@@ -1018,8 +1018,7 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="question-item">
+                       <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 我能快速适应不同类型人群的沟通方式</h3>
                             <div class="option-group" data-question="39" data-type="frequency">
                                 <label class="option-label">
@@ -1268,8 +1267,7 @@
                                 </label>
                             </div>
                         </div>
-
-                        <div class="question-item">
+                     <div class="question-item">
                             <h3 class="text-lg font-semibold text-gray-700 mb-3">3. 在解决问题前，我会制定详细的行动计划，明确每个步骤的目标和时间节点</h3>
                             <div class="option-group" data-question="49" data-type="frequency">
                                 <label class="option-label">
@@ -1370,3 +1368,472 @@
                                 </label>
                                 <label class="option-label">
                                     <input type="radio" name="q53" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q53" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                     	<div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">8. 我能通过逻辑推理，预测问题解决过程中可能遇到的困难</h3>
+                            <div class="option-group" data-question="54" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q54" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+				<label class="option-label">
+                                    <input type="radio" name="q54" value="1" class="option-input">
+                                    E. 比较不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">9. 对于长期项目，我会将其分解为多个阶段，每个阶段设定明确的里程碑</h3>
+                            <div class="option-group" data-question="55" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q55" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">10. 我能根据问题的性质，选择合适的分析工具和方法进行问题拆解</h3>
+                            <div class="option-group" data-question="56" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q56" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+
+                     	<div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">11. 在团队解决问题时，我能引导团队成员按照逻辑顺序开展讨论</h3>
+                            <div class="option-group" data-question="57" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="5" class="option-input">
+                                    A. 非常同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="4" class="option-input">
+                                    B. 比较同意
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="3" class="option-input">
+                                    C. 一般
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q57" value="2" class="option-input">
+                                    D. 比较不同意
+                                </label>
+				<label class="option-label">
+                                    <input type="radio" name="q57" value="1" class="option-input">
+                                    E. 比较不同意
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="question-item">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">12. 我会定期回顾问题解决过程和计划执行情况，总结经验教训</h3>
+                            <div class="option-group" data-question="58" data-type="frequency">
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="4" class="option-input">
+                                    A. 总是
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="3" class="option-input">
+                                    B. 经常
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="2" class="option-input">
+                                    C. 偶尔
+                                </label>
+                                <label class="option-label">
+                                    <input type="radio" name="q58" value="1" class="option-input">
+                                    D. 从不
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end mt-8 space-x-4">
+                            <button class="prev-module btn btn-secondary" data-prev="4">
+                                <i class="fa fa-arrow-left mr-2"></i>返回上一模块
+                            </button>
+                            <button id="submit-test" class="btn btn-accent">
+                                <i class="fa fa-check-circle mr-2"></i>提交答案
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面（初始隐藏） -->
+        <div id="result-page" class="hidden">
+            <div class="card">
+                <h2 class="text-2xl font-bold text-center mb-6">测试结果</h2>
+                
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4">综合得分：<span id="total-score" class="text-primary">0</span>/100</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>创造力：<span id="score-1" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>技术能力：<span id="score-2" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>任务理解与解决能力：<span id="score-3" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p>社交应变能力：<span id="score-4" class="font-medium">0</span>/100</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg md:col-span-2">
+                            <p>问题拆解能力：<span id="score-5" class="font-medium">0</span>/100</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 雷达图容器 -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-semibold mb-4">五维能力雷达图</h3>
+                    <div class="h-80">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button id="restart-test" class="btn btn-primary">
+                        <i class="fa fa-refresh mr-2"></i>重新测试
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 存储每个模块的题目范围和满分值
+        const moduleConfig = {
+            1: { 
+                name: "创造力（创新能力）",
+                start: 1, 
+                end: 3, 
+                fullScore: 10 // 示例值，根据实际题目数量计算
+            },
+            2: { 
+                name: "技术能力（专业能力与学习能力）",
+                start: 13, 
+                end: 14, 
+                fullScore: 8 // 示例值
+            },
+            3: { 
+                name: "任务理解与解决能力",
+                start: 26, 
+                end: 27, 
+                fullScore: 9 // 示例值
+            },
+            4: { 
+                name: "社交应变能力",
+                start: 37, 
+                end: 38, 
+                fullScore: 9 // 示例值
+            },
+            5: { 
+                name: "问题拆解能力",
+                start: 47, 
+                end: 48, 
+                fullScore: 9 // 示例值
+            }
+        };
+
+        // 当前模块
+        let currentModule = 1;
+        
+        // 监听开始测试按钮
+        document.getElementById('start-test').addEventListener('click', function() {
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('test-page').classList.remove('hidden');
+        });
+        
+        // 监听下一模块按钮
+        document.querySelectorAll('.next-module').forEach(button => {
+            button.addEventListener('click', function() {
+                const nextModule = parseInt(this.getAttribute('data-next'));
+                
+                // 验证当前模块所有题目都已回答
+                const currentQuestions = document.querySelectorAll(`#module-${currentModule} input[type="radio"]:checked`);
+                const totalQuestions = document.querySelectorAll(`#module-${currentModule} input[type="radio"]`).length / 
+                                      (moduleConfig[currentModule].type === 'frequency' ? 4 : 5);
+                
+                if (currentQuestions.length < totalQuestions) {
+                    alert('请完成当前模块的所有题目再进入下一模块');
+                    return;
+                }
+                
+                // 隐藏当前模块，显示下一模块
+                document.getElementById(`module-${currentModule}`).classList.add('hidden');
+                document.getElementById(`module-${nextModule}`).classList.remove('hidden');
+                
+                // 更新模块标题
+                document.getElementById('module-title').textContent = `模块${nextModule}：${moduleConfig[nextModule].name}`;
+                
+                // 更新进度指示器
+                document.querySelector(`.progress-indicator[data-module="${nextModule}"]`).classList.remove('bg-gray-300');
+                document.querySelector(`.progress-indicator[data-module="${nextModule}"]`).classList.add('bg-primary');
+                
+                // 更新当前模块
+                currentModule = nextModule;
+                
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // 监听上一模块按钮
+        document.querySelectorAll('.prev-module').forEach(button => {
+            button.addEventListener('click', function() {
+                const prevModule = parseInt(this.getAttribute('data-prev'));
+                
+                // 隐藏当前模块，显示上一模块
+                document.getElementById(`module-${currentModule}`).classList.add('hidden');
+                document.getElementById(`module-${prevModule}`).classList.remove('hidden');
+                
+                // 更新模块标题
+                document.getElementById('module-title').textContent = `模块${prevModule}：${moduleConfig[prevModule].name}`;
+                
+                // 更新当前模块
+                currentModule = prevModule;
+                
+                // 滚动到顶部
+                window.scrollTo(0, 0);
+            });
+        });
+        
+        // 监听提交按钮
+        document.getElementById('submit-test').addEventListener('click', function() {
+            // 验证所有模块所有题目都已回答
+            let allAnswered = true;
+            
+            for (let i = 1; i <= 5; i++) {
+                const questions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
+                const totalQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length / 
+                                      (i === 1 || i === 2 || i === 4 ? 4 : 5);
+                
+                if (questions.length < totalQuestions) {
+                    allAnswered = false;
+                    break;
+                }
+            }
+            
+            if (!allAnswered) {
+                alert('请完成所有模块的所有题目再提交');
+                return;
+            }
+            
+            // 计算各模块得分
+            const moduleScores = calculateScores();
+            
+            // 显示结果页面
+            showResults(moduleScores);
+        });
+        
+        // 计算得分
+        function calculateScores() {
+            const scores = {
+                1: 0,
+                2: 0,
+                3: 0,
+                4: 0,
+                5: 0
+            };
+            
+            // 计算每个模块的得分
+            for (let module = 1; module <= 5; module++) {
+                let total = 0;
+                const questions = document.querySelectorAll(`#module-${module} input[type="radio"]:checked`);
+                
+                questions.forEach(question => {
+                    total += parseInt(question.value);
+                });
+                
+                // 计算百分比得分（当前模块得分 / 该模块满分 * 100）
+                const percentage = Math.floor((total / moduleConfig[module].fullScore) * 100);
+                scores[module] = percentage;
+            }
+            
+            // 计算综合得分（按权重计算）
+            const totalScore = Math.floor(
+                scores[1] * 0.2 + 
+                scores[2] * 0.25 + 
+                scores[3] * 0.2 + 
+                scores[4] * 0.15 + 
+                scores[5] * 0.2
+            );
+            
+            return { ...scores, total: totalScore };
+        }
+        
+        // 显示结果
+        function showResults(scores) {
+            // 隐藏测试页面，显示结果页面
+            document.getElementById('test-page').classList.add('hidden');
+            document.getElementById('result-page').classList.remove('hidden');
+            
+            // 显示得分
+            document.getElementById('total-score').textContent = scores.total;
+            document.getElementById('score-1').textContent = scores[1];
+            document.getElementById('score-2').textContent = scores[2];
+            document.getElementById('score-3').textContent = scores[3];
+            document.getElementById('score-4').textContent = scores[4];
+            document.getElementById('score-5').textContent = scores[5];
+            
+            // 生成雷达图数据（每个模块得分除以100再乘以5）
+            const radarScores = [
+                scores[1] / 100 * 5,
+                scores[2] / 100 * 5,
+                scores[3] / 100 * 5,
+                scores[4] / 100 * 5,
+                scores[5] / 100 * 5
+            ];
+            
+            // 绘制雷达图
+            drawRadarChart(radarScores);
+        }
+        
+        // 绘制雷达图
+        function drawRadarChart(scores) {
+            const ctx = document.getElementById('radar-chart').getContext('2d');
+            const labels = [
+                '创造性', 
+                '技术能力', 
+                '任务理解与解决能力', 
+                '社交应变能力', 
+                '问题拆解能力'
+            ];
+            
+            // 如果已有图表实例，先销毁
+            if (window.radarChartInstance) {
+                window.radarChartInstance.destroy();
+            }
+            
+            // 创建新图表
+            window.radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '能力值',
+                        data: scores,
+                        backgroundColor: 'rgba(37, 99, 235, 0.2)',
+                        borderColor: 'rgba(37, 99, 235, 1)',
+                        pointBackgroundColor: 'rgba(37, 99, 235, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(37, 99, 235, 1)'
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 重新测试
+        document.getElementById('restart-test').addEventListener('click', function() {
+            // 重置所有选择
+            document.querySelectorAll('input[type="radio"]:checked').forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 重置模块显示
+            document.querySelectorAll('.module').forEach((module, index) => {
+                if (index === 0) {
+                    module.classList.remove('hidden');
+                } else {
+                    module.classList.add('hidden');
+                }
+            });
+            
+            // 重置进度指示器
+            document.querySelectorAll('.progress-indicator').forEach((indicator, index) => {
+                if (index === 0) {
+                    indicator.classList.remove('bg-gray-300');
+                    indicator.classList.add('bg-primary');
+                } else {
+                    indicator.classList.remove('bg-primary');
+                    indicator.classList.add('bg-gray-300');
+                }
+            });
+            
+            // 重置当前模块
+            currentModule = 1;
+            
+            // 更新模块标题
+            document.getElementById('module-title').textContent = `模块1：${moduleConfig[1].name}`;
+            
+            // 隐藏结果页面，显示测试页面
+            document.getElementById('result-page').classList.add('hidden');
+            document.getElementById('test-page').classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
