@@ -1655,26 +1655,41 @@
             });
         });
         
-        // 监听提交按钮
-        document.getElementById('submit-test').addEventListener('click', function() {
-            // 验证所有模块所有题目都已回答
-            let allAnswered = true;
-            
-            for (let i = 1; i <= 5; i++) {
-                const questions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`);
-                const totalQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]`).length / 
-                                      (i === 1 || i === 2 || i === 4 ? 4 : 5);
-                
-                if (questions.length < totalQuestions) {
-                    allAnswered = false;
-                    break;
-                }
-            }
-            
-            if (!allAnswered) {
-                alert('请完成所有模块的所有题目再提交');
-                return;
-            }
+ // 监听提交按钮
+document.getElementById('submit-test').addEventListener('click', function() {
+    // 验证所有模块所有题目都已回答
+    let allAnswered = true;
+    let uncompletedModule = 0;
+    let uncompletedCount = 0;
+    
+    for (let i = 1; i <= 5; i++) {
+        // 获取当前模块的所有问题容器
+        const questionItems = document.querySelectorAll(`#module-${i} .question-item`);
+        const totalQuestions = questionItems.length;
+        
+        // 获取当前模块已回答的问题数量
+        const answeredQuestions = document.querySelectorAll(`#module-${i} input[type="radio"]:checked`).length;
+        
+        // 检查是否所有问题都已回答
+        if (answeredQuestions < totalQuestions) {
+            allAnswered = false;
+            uncompletedModule = i;
+            uncompletedCount = totalQuestions - answeredQuestions;
+            break;
+        }
+    }
+    
+    if (!allAnswered) {
+        alert(`模块${uncompletedModule}还有${uncompletedCount}道题目未完成，请完成后再提交`);
+        return;
+    }
+    
+    // 计算各模块得分
+    const moduleScores = calculateScores();
+    
+    // 显示结果页面
+    showResults(moduleScores);
+});
             
             // 计算各模块得分
             const moduleScores = calculateScores();
