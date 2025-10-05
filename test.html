@@ -1658,7 +1658,6 @@
         // 监听提交按钮
         document.getElementById('submit-test').addEventListener('click', function() {
             // 验证所有模块所有题目都已回答
-            let allAnswered = true;
             let sum = 0;
 
 	    for (let i = 1; i <= 5; i++) {
@@ -1672,7 +1671,7 @@
 	    if (!allAnswered) {
         	// 计算未完成的题目数量并提示
         	const remaining = 58 - sum;
-        	alert(`还有${remaining}道题目未完成，请完成所有58道题目后再提交`);
+        	alert(`还有${remaining}道题目未完成，请完成所有题目后再提交`);
         	return;
     	    }
 	    const moduleScores = calculateScores();
